@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewpoint" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-reboot.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-grid.css">
+    <link rel="stylesheet" type="text/css" href="../css/visualization.css">
+    <script type="text/javascript" src="../js/popper.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/d3.min.js"></script>
+    <script type="text/javascript" src="../js/echarts.min.js"></script>
+    <script type="text/javascript" src="../js/colorbrewer.js"></script>
+    <title>Visualization</title>
+</head>
+
+<body style="background-image: url(../img/background.jpg);">
+    <div class="container-fluid nav">
+        <p class="font-weight-bold text-center">国控数据可视化</p>
+        <img width="32px" height="32px" id="fullscreen" data-toggle="fullscreentips" title="切换全屏" onclick="fullscreen()" src="../img/fullscreen.png" class="float-right img-fluid">
+    </div>
+        <div class="container-fluid row wrapper">
+            <div class="col-3 frame">
+                <div class="small-block">
+                    <div class="title">
+                        <p class="font-weight-bold text-left" id="smallp">Monthly ChartVis</p>
+                    </div>
+                    <div class="content" id="small-view1"></div>
+                </div>
+                <div class="small-block">
+                    <div class="title">
+                        <p class="font-weight-bold text-left" id="smallp">Daily RadarVis</p>
+                    </div>
+                    <div class="content" id="radar"></div>
+                </div>
+                <div class="small-block">
+                    <div class="title">
+                        <p class="font-weight-bold text-left" id="smallp">Region DataVis</p>
+                    </div>
+                    <div class="content" id="region"></div>
+                </div>
+            </div>
+            <div class="col-9 frame" style="padding: 3px;">
+                <div class="title">
+                    <p class="font-weight-bold text-left">Spatial Visualization</p>
+                    <div data-date-format="yyyy-mm-dd" class="input-group date form_date col-md-5" data-date="2015-01-01" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd" align="right">
+                        <input class="form-control" size="16" type="text" value="2015-01-01" readonly>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                    <div class="time col-md-5">
+                        <select id="time" class="selectpicker show-tick form-control" style="height: auto" data-live-search="true">
+                            <option>00:00:00</option>
+                            <option>04:00:00</option>
+                            <option>08:00:00</option>
+                            <option>12:00:00</option>
+                            <option>16:00:00</option>
+                            <option>20:00:00</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="content" id="big-map">
+                    <div class="btn-group-vertical sample">
+                        <input id="ph" type="button" value="PH 值" class="btn btn-primary" style="margin-top: -1px;margin-left: 0;" />
+                        <input id="do" type="button" value="溶解氧量" class="btn btn-success" />
+                        <input id="an" type="button" style="color: white" value="氨氮浓度" class="btn btn-warning" />
+                        <input id="toc" type="button" value="高锰酸盐" class="btn btn-danger" />
+                        <input id="pp" type="button" value="总有机碳" class="btn btn-info" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="floatbtn" class="btn btn-success btn-circle btn-xl" data-placement="top" data-toggle="popover" data-trigger="hover" data-target="#myModal"></button>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><a href="http://176.122.131.25:8089/VisTaskData/Visualization/html/visualization.html"> 国控数据可视化 </a></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        首先灰常感谢您在漫长的加载后观看<a class=".text-center .font-italic" href="https://yank-tenyond.cn/" target="_blank"> Yank </a>的国控数据可视化作品（欢迎在Github上给我个Star：<a class=".text-center .font-italic" href="https://github.com/Dreamcreationman/VisTaskData" target="_blank"> Github传送门 </a>），由于服务器在国外（国内的云主机最近负载有点大，不敢用），故首次加载较慢。其中有一些重要的问题需要指出：</br></br>
+                        <code>1. 框架：</code>
+                        主要使用bootstrap和d3构建整体框架和动画过渡（由于时间问题没做多少），部分视图采用echart绘制，采用colorbrewer作为主要配色方案。</br>
+                        <code>2. 提示：</code>
+                        <table border="1">
+                            <tr>
+                                <td>Spatial Visualization视图</td>
+                                <td>该视图展示水控站点的空间位置信息</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly ChartVis视图</td>
+                                <td>该视图展示选定站点一个月以来的选定指标的日均值变化情况</td>
+                            </tr>
+                            <tr>
+                                <td>Daily RadarVis视图</td>
+                                <td>该视图展示了选定站点选定时间点的各个指标的情况</td>
+                            </tr>
+                            <tr>
+                                <td>Region DataVis视图</td>
+                                <td>该视图展示了各个流域的选定指标的月平均情况</td>
+                            </tr>
+                        </table>
+                        <code>3. 总结：</code>
+                        <dl>
+                            <dt>数据获取</dt>
+                            <dd>· chrome不支持本地file协议，所以自建Apache服务器，前两天是解决了跨域问题，怎么一段时间没用貌似又抽风了（最近偏穷，服务器都快续费不起了）！</dd>
+                            <dt>数据处理</dt>
+                            <dd>· 由于能力、时间等原因，本次数据可视化未作数据清洗工作，导致部分数据锚点错误甚至console报错，敬请谅解！</dd>
+                            <dt>可视化展示</dt>
+                            <dd>· 开始想用响应式布局，但是越到后面越懵逼，现在只是尽量做了适配，经测试在分辨率为1920*1080， 1366*768显示器显示较为正常！</dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">Power By <a target="_blank" class=".text-center .font-italic" href="https://yank-tenyond.cn/">Yank</a>@SWUST <a class=".text-center .font-italic" href="http://iotat.swust.edulab.cn/" target="_blank"> IOTAT</a></div>
+</body>
+<script type="text/javascript" src="../js/function.js"></script>
+<script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="../js/vistaskradar.js"></script>
+<script type="text/javascript" src="../js/vistaskregion.js"></script>
+<script type="text/javascript" src="../js/vistaskmonthchart.js"></script>
+<script type="text/javascript" src="../js/vistaskmap.js"></script>
+<script type="text/javascript" src="../js/run.js"></script>
+<script type="text/javascript" src="../js/floatbutton.js"></script>
+
+</html>
