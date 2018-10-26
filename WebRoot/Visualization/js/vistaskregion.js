@@ -117,12 +117,23 @@ function getRegionChart(view, width, height, resBase, resStation, type) {
                     var x = this.id.split("_")[0];
                     var y = this.id.split("_")[1];
                     var avg = this.id.split("_")[2];
-                    tooltip.html("<div style='text-align:center;color:" + color(x % 12) + "'>" + riverRegion[x] + "流域</div>" +
-                            "地点 : " + getNameById(res[x][y][0].sta_id, resBase) + " <br/>" +
-                            "月平均值 ：" + avg + "</br>")
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY + 20) + "px")
-                        .style("opacity", 1.0);
+                    console.log(d3.event.pageY )
+                    if (d3.event.pageY < 861) {
+                    	tooltip.html("<div style='text-align:center;color:" + color(x % 12) + "'>" + riverRegion[x] + "流域</div>" +
+                                "地点 : " + getNameById(res[x][y][0].sta_id, resBase) + " <br/>" +
+                                "月平均值 ：" + avg + "</br>")
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 20) + "px")
+                            .style("opacity", 1.0);
+					}else {
+						tooltip.html("<div style='text-align:center;color:" + color(x % 12) + "'>" + riverRegion[x] + "流域</div>" +
+                                "地点 : " + getNameById(res[x][y][0].sta_id, resBase) + " <br/>" +
+                                "月平均值 ：" + avg + "</br>")
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 20) + "px")
+                            .style("opacity", 1.0);
+					}
+                    
                     d3.select(this).transition()
                         .ease(d3.easeLinear)
                         .attr("r", "8");
